@@ -71,3 +71,28 @@ if (!reduceMotion) {
     });
   });
 }
+
+// Header/footer logo and BACK TO TOP behave like buttons instead of hash links.
+// Removing href prevents the browser from showing "https://trifecta.co.jp/#top"
+// in the status area while keeping smooth scroll-to-top behavior.
+document.querySelectorAll(".brand-logo, .back-top").forEach(el => {
+  el.removeAttribute("href");
+  el.setAttribute("role", "button");
+  el.setAttribute("tabindex", "0");
+  el.style.cursor = "pointer";
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: reduceMotion ? "auto" : "smooth"
+    });
+  };
+
+  el.addEventListener("click", scrollToTop);
+  el.addEventListener("keydown", event => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      scrollToTop();
+    }
+  });
+});
