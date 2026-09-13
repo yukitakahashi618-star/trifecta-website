@@ -73,8 +73,6 @@ if (!reduceMotion) {
 }
 
 // Header/footer logo and BACK TO TOP behave like buttons instead of hash links.
-// Removing href prevents the browser from showing "https://trifecta.co.jp/#top"
-// in the status area while keeping smooth scroll-to-top behavior.
 document.querySelectorAll(".brand-logo, .back-top").forEach(el => {
   el.removeAttribute("href");
   el.setAttribute("role", "button");
@@ -96,3 +94,50 @@ document.querySelectorAll(".brand-logo, .back-top").forEach(el => {
     }
   });
 });
+
+// Hero refresh: cityscape + Trifecta logo image supplied by the user.
+const hero = document.querySelector(".hero");
+if (hero) {
+  const heroStyle = document.createElement("style");
+  heroStyle.id = "trifecta-city-hero";
+  heroStyle.textContent = `
+    .hero{
+      min-height:100svh!important;
+      background-image:
+        linear-gradient(to bottom,rgba(4,13,22,.08) 0%,rgba(4,13,22,.04) 42%,rgba(4,13,22,.36) 100%),
+        url("assets/images/trifecta-city-hero.jpg?v=1")!important;
+      background-size:cover!important;
+      background-position:center 47%!important;
+      background-repeat:no-repeat!important;
+      display:block!important;
+    }
+    .hero::after{
+      content:"SCROLL";
+      position:absolute;
+      left:50%;bottom:34px;
+      transform:translateX(-50%);
+      z-index:4;
+      color:#fff;
+      font:600 9px/1 "DM Sans",sans-serif;
+      letter-spacing:.28em;
+      text-shadow:0 2px 12px rgba(0,0,0,.45);
+    }
+    .hero::before{
+      content:"";
+      position:absolute;
+      left:50%;bottom:0;
+      width:1px;height:25px;
+      transform:translateX(-50%);
+      z-index:4;
+      background:rgba(255,255,255,.72);
+    }
+    .hero-grid,.hero-glow,.hero-layout,.hero-side,.hero-stat{display:none!important}
+    .header{background:linear-gradient(to bottom,rgba(0,0,0,.24),transparent)!important}
+    .header.scrolled{background:rgba(16,17,17,.94)!important}
+    @media(max-width:900px){
+      .hero{background-position:center center!important}
+      .hero::after{bottom:30px}
+    }
+  `;
+  document.head.appendChild(heroStyle);
+}
