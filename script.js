@@ -73,3 +73,34 @@ document.querySelectorAll(".brand-logo, .back-top").forEach(el => {
     if (event.key === "Enter" || event.key === " ") { event.preventDefault(); scrollToTop(); }
   });
 });
+
+// Launch announcement modal
+const noticeModal = document.createElement("div");
+noticeModal.className = "notice-modal";
+noticeModal.setAttribute("role", "dialog");
+noticeModal.setAttribute("aria-modal", "true");
+noticeModal.setAttribute("aria-labelledby", "noticeTitle");
+noticeModal.innerHTML = `
+  <div class="notice-modal__panel">
+    <button class="notice-modal__close" type="button" aria-label="お知らせを閉じる"><span></span><span></span></button>
+    <p class="notice-modal__eyebrow">NEWS</p>
+    <h2 id="noticeTitle">お知らせ</h2>
+    <div class="notice-modal__line" aria-hidden="true"></div>
+    <p class="notice-modal__text">株式会社Trifectaのコーポレートサイトを公開しました。<br>今後ともよろしくお願いいたします。</p>
+  </div>`;
+document.body.appendChild(noticeModal);
+
+const noticeClose = noticeModal.querySelector(".notice-modal__close");
+const closeNotice = () => {
+  noticeModal.classList.remove("is-open");
+  document.body.classList.remove("notice-open");
+};
+const openNotice = () => {
+  noticeModal.classList.add("is-open");
+  document.body.classList.add("notice-open");
+  noticeClose.focus({ preventScroll: true });
+};
+noticeClose.addEventListener("click", closeNotice);
+noticeModal.addEventListener("click", event => { if (event.target === noticeModal) closeNotice(); });
+document.addEventListener("keydown", event => { if (event.key === "Escape" && noticeModal.classList.contains("is-open")) closeNotice(); });
+window.addEventListener("load", () => window.setTimeout(openNotice, reduceMotion ? 0 : 450), { once: true });
